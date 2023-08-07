@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.waldron.springframework</groupId>
-	<artifactId>beer-client</artifactId>
+	<artifactId>reactive-beer-client</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>beer-client</name>
 	<description>beer client assignment form udemy reactive spring course</description>
