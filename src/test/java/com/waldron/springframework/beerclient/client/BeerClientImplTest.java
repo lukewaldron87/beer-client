@@ -176,6 +176,25 @@ class BeerClientImplTest {
 
     @Test
     void updateBeerById() {
+
+        Mono<BeerPagedList> beerPagedListMono = beerClient.listBeer(1, 10, null, null, null);
+        BeerPagedList pagedList = beerPagedListMono.block();
+        BeerDto beerDto = pagedList.getContent().stream().findFirst().get();
+
+        BeerDto updateBeerDto = BeerDto.builder()
+                .beerName("updated name")
+                .beerStyle(beerDto.getBeerStyle())
+                .price(beerDto.getPrice())
+                .upc(beerDto.getUpc())
+                .build();
+
+        Mono<ResponseEntity<Void>> responseEntityMono = beerClient.updateBeerById(beerDto.getId(), updateBeerDto);
+
+        ResponseEntity<Void> responseEntity = responseEntityMono.block();
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+
+        Mono<BeerDto> beerAfterUpdate = beerClient.getBeerById(beerDto.getId(), false);
+        assertThat(beerAfterUpdate.block().getBeerName()).isEqualTo(updateBeerDto.getBeerName());
     }
 
     @Test
