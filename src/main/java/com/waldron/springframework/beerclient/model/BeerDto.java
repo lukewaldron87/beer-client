@@ -25,7 +25,7 @@ public class BeerDto {
     private String beerName;
 
     @NotBlank
-    private BeerStyle beerStyle;
+    private String beerStyle;
 
     private String upc;
 

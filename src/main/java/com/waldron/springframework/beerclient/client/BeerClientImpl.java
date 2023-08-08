@@ -6,6 +6,8 @@ import com.waldron.springframework.beerclient.model.BeerPagedList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyInserter;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -39,23 +41,27 @@ public class BeerClientImpl implements BeerClient {
     @Override
     public Mono<BeerDto> getBeerById(UUID beerId, Boolean showInventoryOnHand) {
         return webClient.get()
-                .uri(uriBuilder -> uriBuilder.path(WebClientProperties.BEER_V1_PATH + "/" + beerId.toString())
+                .uri(uriBuilder -> uriBuilder.path(WebClientProperties.BEER_V1_PATH_GET_BY_ID)
                         .queryParamIfPresent("showInventoryOnHand", Optional.ofNullable(showInventoryOnHand))
-                        .build())
+                        .build(beerId))
                 .retrieve()
                 .bodyToMono(BeerDto.class);
     }
     @Override
     public Mono<BeerDto> getBeerByUPC(String upc) {
         return webClient.get()
-                .uri(uriBuilder -> uriBuilder.path(WebClientProperties.BEER_UPC_V1_PATH+"/"+upc).build())
+                .uri(uriBuilder -> uriBuilder.path(WebClientProperties.BEER_UPC_V1_PATH).build(upc))
                 .retrieve()
                 .bodyToMono(BeerDto.class);
     }
 
     @Override
-    public Mono<ResponseEntity> createNreBeer(BeerDto beerDto) {
-        return null;
+    public Mono<ResponseEntity<Void>> createBeer(BeerDto beerDto) {
+        return webClient.post()
+                .uri(uriBuilder -> uriBuilder.path(WebClientProperties.BEER_V1_PATH).build())
+                .body(BodyInserters.fromValue(beerDto))
+                .retrieve()
+                .toBodilessEntity();
     }
 
     @Override

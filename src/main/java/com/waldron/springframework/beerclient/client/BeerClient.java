@@ -3,8 +3,6 @@ package com.waldron.springframework.beerclient.client;
 import com.waldron.springframework.beerclient.model.BeerDto;
 import com.waldron.springframework.beerclient.model.BeerPagedList;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
@@ -19,7 +17,7 @@ public interface BeerClient {
                                  String beerStyle,
                                  Boolean showInventoryOnHand);
 
-    Mono<ResponseEntity> createNreBeer(BeerDto beerDto);
+    Mono<ResponseEntity<Void>> createBeer(BeerDto beerDto);
 
     Mono<ResponseEntity> updateBeerById(UUID beerId, BeerDto beerDto);
 
