@@ -1,10 +1,13 @@
 package com.waldron.springframework.beerclient.client;
 
 import com.waldron.springframework.beerclient.config.WebClientConfig;
+import com.waldron.springframework.beerclient.model.BeerDto;
 import com.waldron.springframework.beerclient.model.BeerPagedList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Mono;
+
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,6 +22,24 @@ class BeerClientImplTest {
 
     @Test
     void getBeerById() {
+        // get list of beers to get an existing id
+
+        Mono<BeerPagedList> beerPagedListMono = beerClient.listBeer(1,
+                                                                    10,
+                                                                    null,
+                                                                    null,
+                                                                    null);
+
+        BeerPagedList pagedList = beerPagedListMono.block();
+        UUID beerId = pagedList.getContent().stream()
+                .findFirst().get().getId();
+
+        Mono<BeerDto> beerDtoMono = beerClient.getBeerById(beerId, false);
+
+        BeerDto beerDto = beerDtoMono.block();
+
+        assertThat(beerDto.getId()).isEqualTo(beerId);
+        System.out.println(beerDto);
     }
 
     @Test
