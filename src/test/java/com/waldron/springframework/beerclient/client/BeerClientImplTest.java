@@ -21,28 +21,6 @@ class BeerClientImplTest {
     }
 
     @Test
-    void getBeerById() {
-        // get list of beers to get an existing id
-
-        Mono<BeerPagedList> beerPagedListMono = beerClient.listBeer(1,
-                                                                    10,
-                                                                    null,
-                                                                    null,
-                                                                    null);
-
-        BeerPagedList pagedList = beerPagedListMono.block();
-        UUID beerId = pagedList.getContent().stream()
-                .findFirst().get().getId();
-
-        Mono<BeerDto> beerDtoMono = beerClient.getBeerById(beerId, false);
-
-        BeerDto beerDto = beerDtoMono.block();
-
-        assertThat(beerDto.getId()).isEqualTo(beerId);
-        System.out.println(beerDto);
-    }
-
-    @Test
     void listBeer() {
 
         Integer pageNumber = null;
@@ -109,6 +87,49 @@ class BeerClientImplTest {
     }
 
     @Test
+    void getBeerById() {
+        // get list of beers to get an existing id
+
+        Mono<BeerPagedList> beerPagedListMono = beerClient.listBeer(1,
+                10,
+                null,
+                null,
+                null);
+
+        BeerPagedList pagedList = beerPagedListMono.block();
+        UUID beerId = pagedList.getContent().stream()
+                .findFirst().get().getId();
+
+        Mono<BeerDto> beerDtoMono = beerClient.getBeerById(beerId, false);
+
+        BeerDto beerDto = beerDtoMono.block();
+
+        assertThat(beerDto.getId()).isEqualTo(beerId);
+        System.out.println(beerDto);
+    }
+
+    @Test
+    void getBeerByUPC() {
+
+        Mono<BeerPagedList> beerPagedListMono = beerClient.listBeer(1,
+                10,
+                null,
+                null,
+                null);
+
+        BeerPagedList pagedList = beerPagedListMono.block();
+        String upc = pagedList.getContent().stream()
+                .findFirst().get().getUpc();
+
+        Mono<BeerDto> beerDtoMono = beerClient.getBeerByUPC(upc);
+
+        BeerDto beerDto = beerDtoMono.block();
+
+        assertThat(beerDto.getUpc()).isEqualTo(upc);
+        System.out.println(beerDto);
+    }
+
+    @Test
     void createNreBeer() {
     }
 
@@ -118,9 +139,5 @@ class BeerClientImplTest {
 
     @Test
     void deleteBeerById() {
-    }
-
-    @Test
-    void getBeerByUpc() {
     }
 }
