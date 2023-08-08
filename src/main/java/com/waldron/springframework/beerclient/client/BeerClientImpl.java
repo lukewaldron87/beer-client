@@ -4,6 +4,7 @@ import com.waldron.springframework.beerclient.config.WebClientProperties;
 import com.waldron.springframework.beerclient.model.BeerDto;
 import com.waldron.springframework.beerclient.model.BeerPagedList;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
